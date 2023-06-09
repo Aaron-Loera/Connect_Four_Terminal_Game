@@ -1,39 +1,24 @@
-#ajlfkajfldajfdla
-#class for the connect 4 board, determines the width and length
+#Encapsulates the board for Connect4 using width and length
 class Board:
+    board_as_list = []
+
     def __init__(self, length=6, width=6):
         self.length = length
         self.width = width
+        Board.board_as_list = [(["-"] * self.width) for number in range(self.length)]
     
-    #displays the board as a list
-    def board_as_list(self):
-        board = []
-        for number in range(self.length):
-            board.append(["-"] * self.width)
-        return board
-    
-    #displays the board to the player
     def __repr__(self):
-        board = ""
-        for row in self.board_as_list():
-            for piece in row:
-                board += "-"
-            board += "\n"
-        return board
-    
-    def add_piece(self, board, player, list, sublist):
-        return player.color
+        board_as_string = ""
+        for row in Board.board_as_list:
+            for item in row:
+                board_as_string += item
+            board_as_string += "\n"
+        return board_as_string
 
-#function for making a board    
-def connect4_board(width, length):
-    board = []
-    for number in range(length):
-        board.append(["-"] * width)
-    return board
-
-#class for each player in connect 4
+#Encapsulates the data for a player in Connect4
 class Player:
     player_count = 0
+
     def __init__(self, name, color=""):
         self.name = name
         self.color = color
@@ -43,15 +28,17 @@ class Player:
     def __repr__(self):
         return "Hello " + self.name + ", your are player " + str(self.player) + " and your color is " + self.color  + "."
     
+    #Returns the Board after a player has made a move
     def make_move(self, board_name, list_index, sublist_index):
-       board_name[list_index][sublist_index] = self.color[0]
+       board_name.board_as_list[list_index][sublist_index] = self.color[0]
        return board_name
     
-    
-    
-the_board = connect4_board(6,6)
-player1 = Player("Aaron", "red")
-print(player1.make_move(the_board, 5, 5))
+     
+board1 = Board()
+player1 = Player("Aaron", "Red")
+print(player1.make_move(board1, 5, 5))
+print(player1.make_move(board1, 5, 1))
+
 # #asks for player1 data with user input
 # player1_name = input("Welcome to Connect Four! Hello Player 1, can I have your name please: ")
 
