@@ -1,26 +1,26 @@
 #imports letters as a form of iteration
-from string import ascii_uppercase as letters
+from string import ascii_uppercase as row_letters
 
 #Encapsulates the board for Connect4 using width and length
 class Board:
     board_as_list = []
-    #board_as_list = [[[0], [1, 2, 3, 4, 5]]]
-
     def __init__(self):
         self.length = 6
         self.width = 6
-        #Board.board_as_list= [[0, [(number+1) for number in range(self.width)]]]
-        Board.board_as_list = [[letter] for letter in letters if letters.index(letter) in range(self.length)]
-        for row in Board.board_as_list:
-            row.append(["-"] * self.width)
-        #Board.board_as_list.append(board_grid)
-
+        Board.board_as_list= [[0, [(number+1) for number in range(self.width)]]]
+        for letter in row_letters:
+            if row_letters.index(letter) in range(self.width):
+                Board.board_as_list.append([letter, ["-"] * self.width])
 
     def __repr__(self):
         board_as_string = ""
         for row in Board.board_as_list:
             for item in row:
-                board_as_string += str(item)
+                if Board.board_as_list.index(row) == 0 and row.index(item) == 1:
+                    for list_item in item:
+                        board_as_string += "  " + str(list_item) + "  "
+                else:
+                    board_as_string += str(item)
             board_as_string += "\n"
         return board_as_string
 
@@ -39,14 +39,14 @@ class Player:
     
     #returns the new Board after a Player has made a move
     def make_move(self, board_name, list_index, sublist_index):
-       board_name.board_as_list[list_index][1][sublist_index] = self.color[0]
+       board_name.board_as_list[list_index+1][1][sublist_index] = self.color[0]
        return board_name
     
 board1 = Board()
 player1 = Player("Aaron", "Red")
-print(board1)
 #print(board1.board_as_list)
-#print(player1.make_move(board1, 0, 0))
+print(board1)
+print(player1.make_move(board1, 5, 0))
 
 
 # #asks for player1 name data with user input
