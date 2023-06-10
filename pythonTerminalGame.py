@@ -23,6 +23,15 @@ class Board:
                     board_as_string += str(item)
             board_as_string += "\n"
         return board_as_string
+    
+    #returns an updates Board after a Player has added a piece
+    def add_piece(self, player, player_input):
+        player_placement = [item for item in player_input]
+        for row in self.board_as_list:
+            if player_placement[0] == row[0]:
+                list = self.board_as_list.index(row)
+                sublist = int(player_placement[1])
+        return player.make_move(self, list, sublist)
 
 #Encapsulates the data for a player in Connect4
 class Player:
@@ -42,6 +51,7 @@ class Player:
        board_name.board_as_list[list_index][1][sublist_index-1] = self.color[0]
        return board_name
     
+    #returns the total pieces on the board of the Player
     def total_pieces(self, board_name):
         count = 0
         for row in board_name.board_as_list:
@@ -50,8 +60,8 @@ class Player:
                     count +=1
         return count
     
-# board1 = Board()
-# player1 = Player("A", "Red")
+# testBoard = Board()
+# testPlayer = Player("A", "Red")
 
 #asks for player1 name data with user input
 player1_name = input("Welcome to Connect Four! Hello Player 1, can I have your name please: ")
@@ -119,3 +129,5 @@ for row in connect4_board.board_as_list:
         sublist = int(player2_placement[1])
         print(player2.make_move(connect4_board, list, sublist))
 
+while player1.total_pieces(connect4_board) < 4 and player2.total_pieces(connect4_board) < 4:
+    player1_turn = input("Your turn " + player1.name + ": ")
