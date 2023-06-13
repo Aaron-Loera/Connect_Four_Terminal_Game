@@ -27,11 +27,25 @@ class Board:
     #returns an updated Board after a Player has added a piece
     def add_piece(self, player, player_input):
         player_placement = [item for item in player_input]
-        for row in self.board_as_list:
-            if player_placement[0] == row[0]:
-                list_index = self.board_as_list.index(row)
-                sublist_index = int(player_placement[1])
-        return player.make_move(self, list_index, sublist_index)
+        #makes sure player's input is valid
+        possible_placements = []
+        for number in self.board_as_list[0][1]:
+            for row in self.board_as_list:
+                possible_placements.append([str(row[0]), str(number)])
+        for coordinate in possible_placements:
+            if '0' in coordinate:
+                possible_placements.remove(coordinate)
+        #converts player's input into coordinate on board
+        if player_placement in possible_placements:
+            for row in self.board_as_list:
+                if player_placement[0] == row[0]:
+                    list_index = self.board_as_list.index(row)
+                    sublist_index = int(player_placement[1])
+                    #checks if the coordinate is empty or already taken
+                    if self.board_as_list[list_index][1][sublist_index - 1] == '-':
+                        return player.make_move(self, list_index, sublist_index)
+                    else:
+                        return False
     
     #returns True if a Player has connected 4 pieces horizontally
     def connect4_horizontally(self, player):
@@ -113,11 +127,13 @@ class Player:
     
 testBoard = Board()
 testPlayer = Player("A", "Red")
-testBoard.add_piece(testPlayer, "D5")
-testBoard.add_piece(testPlayer, "C4")
-testBoard.add_piece(testPlayer, "E2")
-print(testBoard.add_piece(testPlayer, "F1"))
-print(testBoard.connect4_diagonally(testPlayer))
+testPlayer2 = Player("B", "Blue")
+# testBoard.add_piece(testPlayer, "D5")
+# testBoard.add_piece(testPlayer, "C4")
+# testBoard.add_piece(testPlayer, "E2")
+print(testBoard.add_piece(testPlayer, "A6"))
+print(testBoard.add_piece(testPlayer2, "A6"))
+# print(testBoard.connect4_diagonally(testPlayer))
 
 
 # #asks for player1 name data with user input
