@@ -29,9 +29,24 @@ class Board:
         player_placement = [item for item in player_input]
         for row in self.board_as_list:
             if player_placement[0] == row[0]:
-                list = self.board_as_list.index(row)
-                sublist = int(player_placement[1])
-        return player.make_move(self, list, sublist)
+                list_index = self.board_as_list.index(row)
+                sublist_index = int(player_placement[1])
+        return player.make_move(self, list_index, sublist_index)
+    
+    #returns True if a Player has connected 4 pieces horizontally
+    def connect_4_horizontally(self, player):
+        player_piece = 0
+        for row in self.board_as_list:
+            for item in row[1]:
+                if player_piece == 4:
+                    return True
+                elif item == player.color[0]:
+                    player_piece += 1
+                else:
+                    player_piece = 0
+        return False
+                
+
 
 #Encapsulates the data for a player in Connect4
 class Player:
@@ -60,74 +75,68 @@ class Player:
                     count +=1
         return count
     
-# testBoard = Board()
-# testPlayer = Player("A", "Red")
+testBoard = Board()
+testPlayer = Player("A", "Red")
+testBoard.add_piece(testPlayer, "F2")
+testBoard.add_piece(testPlayer, "F3")
+testBoard.add_piece(testPlayer, "F4")
+print(testBoard.add_piece(testPlayer, "F5"))
+print(testBoard.connect_4(testPlayer))
 
-#asks for player1 name data with user input
-player1_name = input("Welcome to Connect Four! Hello Player 1, can I have your name please: ")
 
-#creates player1 with name
-player1 = Player(player1_name)
+# #asks for player1 name data with user input
+# player1_name = input("Welcome to Connect Four! Hello Player 1, can I have your name please: ")
 
-#asks for player2 data with user input
-player2_name = input("Welcome Player 2, could I also have your name please: ")
+# #creates player1 with name
+# player1 = Player(player1_name)
 
-#creates player2
-player2 = Player(player2_name)
+# #asks for player2 data with user input
+# player2_name = input("Welcome Player 2, could I also have your name please: ")
 
-#determines the color choice for player1
-color_choice_player1 = input("Welcome " + player1.name + " and " + player2.name + 
-                     ". In connect four the objective is to connect four dots before the other player." +
-                     " You can connect your pieces either horiontally, vertially, or diagonally." +
-                     " Now that you know the basics, it's time to start! Player 1 would you like 'Red' or 'Blue': ")
+# #creates player2
+# player2 = Player(player2_name)
 
-#checks if user input is invalid for color choice of player1
-while color_choice_player1 != "Red" and color_choice_player1 != "Blue":
-    color_choice_player1 = input("Sorry I didn't get that, could you please choose either 'Red' or 'Blue': ")
+# #determines the color choice for player1
+# color_choice_player1 = input("Welcome " + player1.name + " and " + player2.name + 
+#                      ". In connect four the objective is to connect four dots before the other player." +
+#                      " You can connect your pieces either horiontally, vertially, or diagonally." +
+#                      " Now that you know the basics, it's time to start! Player 1 would you like 'Red' or 'Blue': ")
 
-#assigns the color chosesn to player1 object
-player1.color = color_choice_player1
+# #checks if user input is invalid for color choice of player1
+# while color_choice_player1 != "Red" and color_choice_player1 != "Blue":
+#     color_choice_player1 = input("Sorry I didn't get that, could you please choose either 'Red' or 'Blue': ")
 
-#assigns other color to player2
-if color_choice_player1 == "Red":
-    color_choice_player2 = "Blue"
-else:
-    color_choice_player2 = "Red"
+# #assigns the color chosesn to player1 object
+# player1.color = color_choice_player1
 
-#assigns the color to player2 object
-player2.color = color_choice_player2
+# #assigns other color to player2
+# if color_choice_player1 == "Red":
+#     color_choice_player2 = "Blue"
+# else:
+#     color_choice_player2 = "Red"
 
-#instatiates the connect4 board
-connect4_board = Board()
+# #assigns the color to player2 object
+# player2.color = color_choice_player2
 
-#starts the game
-player1_move = input("Alright, that means you're " + player2.color + " " + player2.name + 
-                   ". Now that we have everything set it's time to begin the game. This is the board you will be playing on.\n\n" +
-                   str(connect4_board) + "\nAlright " + player1.name 
-                   + ", pick where you would like place your piece with the letter firt and then the number: ")
+# #instatiates the connect4 board
+# connect4_board = Board()
 
-#turns player1's input into a list
-player1_placement = [num for num in player1_move]
+# #starts the game
+# player1_move = input("Alright, that means you're " + player2.color + " " + player2.name + 
+#                    ". Now that we have everything set it's time to begin the game. This is the board you will be playing on.\n\n" +
+#                    str(connect4_board) + "\nAlright " + player1.name 
+#                    + ", pick where you would like place your piece with the letter first and then the number: ")
 
-#translates player1's input into the coordinate on the board
-for row in connect4_board.board_as_list:
-    if player1_placement[0] == row[0]:
-        list = connect4_board.board_as_list.index(row)
-        sublist = int(player1_placement[1])
-        print(player1.make_move(connect4_board, list, sublist))
+# print(connect4_board.add_piece(player1, player1_move))
 
-#asks for player2's move
-player2_move = input("Great, now it's your turn " + player2.name + ". Pick where your would like to place your piece: ")
+# #asks for player2's move
+# player2_move = input("Great, now it's your turn " + player2.name + ". Pick where your would like to place your piece: ")
 
-#turns player1's input into a list
-player2_placement = [num for num in player2_move]
+# #turns player1's input into a list
+# print(connect4_board.add_piece(player2, player2_move))
 
-#translates player2's input into the coordinate on the board
-for row in connect4_board.board_as_list:
-    if player2_placement[0] == row[0]:
-        list = connect4_board.board_as_list.index(row)
-        sublist = int(player2_placement[1])
-        print(player2.make_move(connect4_board, list, sublist))
-
-while player1.total_pieces(connect4_board) < 4 and player2.total_pieces(connect4_board) < 4:
-    player1_turn = input("Your turn " + player1.name + ": ")
+# while player1.total_pieces(connect4_board) < 4 and player2.total_pieces(connect4_board) < 4:
+#     player1_move = input("Your turn " + player1.name + ": ")
+#     print(connect4_board.add_piece(player1, player1_move))
+#     player2_move = input("Youe turn " + player2.name + ": ")
+#     print(connect4_board.add_piece(player2, player2_move))
