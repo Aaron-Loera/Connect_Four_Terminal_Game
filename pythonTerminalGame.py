@@ -7,7 +7,7 @@ class Board:
     def __init__(self):
         self.length = 6
         self.width = 6
-        Board.board_as_list= [[0, [(number+1) for number in range(self.width)]]]
+        Board.board_as_list = [[0, [(number+1) for number in range(self.width)]]]
         for letter in row_letters:
             if row_letters.index(letter) in range(self.width):
                 Board.board_as_list.append([letter, ["-"] * self.width])
@@ -38,7 +38,7 @@ class Board:
         player_piece = 0
         for row in self.board_as_list:
             for item in row[1]:
-                if player_piece == 4:
+                if player_piece >= 4:
                     return True
                 elif item == player.color[0]:
                     player_piece += 1
@@ -46,11 +46,12 @@ class Board:
                     player_piece = 0
         return False
     
+    #returns True if a Plyaer has connected 4 pieces vertically
     def connect4_vertically(self, player):
         player_piece = 0
         for row in self.board_as_list:
             for item in row[1]:
-                if player_piece == 4:
+                if player_piece >= 4:
                     return True
                 elif item == player.color[0]:
                     player_piece += 1
@@ -59,8 +60,29 @@ class Board:
                         if self.board_as_list[self.board_as_list.index(row) + number][1][sublist_index] == player.color[0]:
                             player_piece += 1
                         else:
-                            return False
-
+                            player_piece = 0
+        return False
+    
+    #returns True if a Player has connect 4 pieces diagonally
+    def connect4_diagonally(self, player):
+        player_piece = 0
+        for row in self.board_as_list:
+            row_index = self.board_as_list.index(row)
+            for item in row[1]:
+                item_index = row[1].index(item)
+                if player_piece >= 4:
+                        return True
+                elif item == player.color[0]:
+                    player_piece +=1
+                    for num in range(1, 4):
+                        if (row_index + num <= 5) and (item_index + num <= 5):
+                            if self.board_as_list[row_index + num][1][item_index + num ] == player.color[0]:
+                                player_piece += 1
+                            elif self.board_as_list[row_index + num][1][item_index - num] == player.color[0]:
+                                player_piece += 1
+                            else:
+                                player_piece = 0
+        return False
 
 #Encapsulates the data for a player in Connect4
 class Player:
@@ -91,11 +113,11 @@ class Player:
     
 testBoard = Board()
 testPlayer = Player("A", "Red")
+testBoard.add_piece(testPlayer, "D5")
+testBoard.add_piece(testPlayer, "C4")
 testBoard.add_piece(testPlayer, "E2")
-testBoard.add_piece(testPlayer, "B2")
-testBoard.add_piece(testPlayer, "C2")
-print(testBoard.add_piece(testPlayer, "D1"))
-print(testBoard.connect4_vertically(testPlayer))
+print(testBoard.add_piece(testPlayer, "F1"))
+print(testBoard.connect4_diagonally(testPlayer))
 
 
 # #asks for player1 name data with user input
