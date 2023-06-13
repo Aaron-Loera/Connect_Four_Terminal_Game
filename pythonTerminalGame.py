@@ -24,7 +24,7 @@ class Board:
             board_as_string += "\n"
         return board_as_string
     
-    #returns an updates Board after a Player has added a piece
+    #returns an updated Board after a Player has added a piece
     def add_piece(self, player, player_input):
         player_placement = [item for item in player_input]
         for row in self.board_as_list:
@@ -34,7 +34,7 @@ class Board:
         return player.make_move(self, list_index, sublist_index)
     
     #returns True if a Player has connected 4 pieces horizontally
-    def connect_4_horizontally(self, player):
+    def connect4_horizontally(self, player):
         player_piece = 0
         for row in self.board_as_list:
             for item in row[1]:
@@ -45,7 +45,21 @@ class Board:
                 else:
                     player_piece = 0
         return False
-                
+    
+    def connect4_vertically(self, player):
+        player_piece = 0
+        for row in self.board_as_list:
+            for item in row[1]:
+                if player_piece == 4:
+                    return True
+                elif item == player.color[0]:
+                    player_piece += 1
+                    sublist_index = row[1].index(item)
+                    for number in range(1,4):
+                        if self.board_as_list[self.board_as_list.index(row) + number][1][sublist_index] == player.color[0]:
+                            player_piece += 1
+                        else:
+                            return False
 
 
 #Encapsulates the data for a player in Connect4
@@ -77,11 +91,11 @@ class Player:
     
 testBoard = Board()
 testPlayer = Player("A", "Red")
-testBoard.add_piece(testPlayer, "F2")
-testBoard.add_piece(testPlayer, "F3")
-testBoard.add_piece(testPlayer, "F4")
-print(testBoard.add_piece(testPlayer, "F5"))
-print(testBoard.connect_4(testPlayer))
+testBoard.add_piece(testPlayer, "E2")
+testBoard.add_piece(testPlayer, "B2")
+testBoard.add_piece(testPlayer, "C2")
+print(testBoard.add_piece(testPlayer, "D1"))
+print(testBoard.connect4_vertically(testPlayer))
 
 
 # #asks for player1 name data with user input
