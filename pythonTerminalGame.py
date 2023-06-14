@@ -4,6 +4,7 @@ from string import ascii_uppercase as row_letters
 #Encapsulates the board for Connect4 using width and length
 class Board:
     board_as_list = []
+
     def __init__(self):
         self.length = 6
         self.width = 6
@@ -37,7 +38,7 @@ class Board:
                     player_piece = 0
         return False
     
-    #returns True if a Plyaer has connected 4 pieces vertically
+    #returns True if a Player has connected 4 pieces vertically
     def connect4_vertically(self, player):
         player_piece = 0
         for row in self.board_as_list:
@@ -56,7 +57,7 @@ class Board:
                                 player_piece = 0
         return False
     
-    #returns True if a Player has connect 4 pieces diagonally
+    #returns True if a Player has connected 4 pieces diagonally
     def connect4_diagonally(self, player):
         player_piece = 0
         for row in self.board_as_list:
@@ -77,7 +78,7 @@ class Board:
                                 return False
         return False
     
-    #checks for all forms of way to win in connect4
+    #checks for all forms of wins in connect4
     def connect4_win(self, player):
         if self.connect4_horizontally(player) == True:
             return True
@@ -133,7 +134,7 @@ class Player:
                 if player_placement[0] == row[0]:
                     list_index = board.board_as_list.index(row)
                     sublist_index = int(player_placement[1])  
-                    #checks if the coordinate is empty or already taken
+                    #checks if the coordinate inputted is empty or already taken
                     if board.board_as_list[list_index][1][sublist_index - 1] == '-':
                         return self.make_move(board, list_index, sublist_index)
                     else:
@@ -141,7 +142,7 @@ class Player:
         else:
             return False
     
-    #Implements the add_piece method along with data validation
+    #implements the add_piece method along with data validation
     def new_turn(self, board, player_coordinate):
         player_move = self.add_piece(board, player_coordinate)
         while player_move == False:
