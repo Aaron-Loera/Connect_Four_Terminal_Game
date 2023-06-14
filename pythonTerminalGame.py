@@ -41,6 +41,7 @@ class Board:
     def connect4_vertically(self, player):
         player_piece = 0
         for row in self.board_as_list:
+            row_index = self.board_as_list.index(row)
             for item in row[1]:
                 if player_piece >= 4:
                     return True
@@ -48,10 +49,11 @@ class Board:
                     player_piece += 1
                     sublist_index = row[1].index(item)
                     for number in range(1,4):
-                        if self.board_as_list[self.board_as_list.index(row) + number][1][sublist_index] == player.color[0]:
-                            player_piece += 1
-                        else:
-                            player_piece = 0
+                        if row_index + number <= 6:
+                            if self.board_as_list[self.board_as_list.index(row) + number][1][sublist_index] == player.color[0]:
+                                player_piece += 1
+                            else:
+                                player_piece = 0
         return False
     
     #returns True if a Player has connect 4 pieces diagonally
@@ -66,13 +68,13 @@ class Board:
                 elif item == player.color[0]:
                     player_piece +=1
                     for num in range(1, 4):
-                        if (row_index + num <= 5) and (item_index + num <= 5):
+                        if (row_index + num <= 6) and (item_index + num <= 5):
                             if self.board_as_list[row_index + num][1][item_index + num ] == player.color[0]:
                                 player_piece += 1
                             elif self.board_as_list[row_index + num][1][item_index - num] == player.color[0]:
                                 player_piece += 1
                             else:
-                                player_piece = 0
+                                return False
         return False
     
     #checks for all forms of way to win in connect4
@@ -147,13 +149,6 @@ class Player:
             player_move = self.add_piece(board, new_coordinate)
         return player_move
     
-# testBoard = Board()
-# testPlayer = Player("A", "Red")
-# testPlayer2 = Player("B", "Blue")
-# print(testBoard.add_piece(testPlayer, "A3"))
-# print(testBoard.add_piece(testPlayer2, "A3"))
-
-
 #asks for player1 name data with user input
 player1_name = input("Welcome to Connect Four! Hello Player 1, can I have your name please: ")
 
@@ -168,20 +163,21 @@ player2 = Player(player2_name)
 
 #determines the color choice for player1
 color_choice_player1 = input("Welcome " + player1.name + " and " + player2.name + 
-                     ". In connect four the objective is to connect four dots before the other player." +
-                     " You can connect your pieces either horiontally, vertially, or diagonally." +
-                     " Now that you know the basics, it's time to start! Player 1 would you like 'Red' or 'Blue': ")
+                     ". In Connect 4 the objective is to connect 4 dots before the other player." +
+                     " You can connect your pieces either horiontally, vertically, or diagonally." +
+                     " Now that you know the basics, it's time to start! " + player1.name + 
+                     " would you like 'Red' or 'Yellow': ")
 
 #checks if user input is invalid for color choice of player1
-while color_choice_player1 != "Red" and color_choice_player1 != "Blue":
-    color_choice_player1 = input("Sorry I didn't get that, could you please choose either 'Red' or 'Blue': ")
+while color_choice_player1 != "Red" and color_choice_player1 != "Yellow":
+    color_choice_player1 = input("Sorry I didn't get that, could you please choose either 'Red' or 'Yellow': ")
 
 #assigns the color chosesn to player1 object
 player1.color = color_choice_player1
 
 #assigns other color to player2
 if color_choice_player1 == "Red":
-    color_choice_player2 = "Blue"
+    color_choice_player2 = "Yellow"
 else:
     color_choice_player2 = "Red"
 
@@ -192,38 +188,39 @@ player2.color = color_choice_player2
 connect4_board = Board()
 
 #starts the game
-player1_move = input("Alright, that means you're " + player2.color + " " + player2.name + 
-                   ". Now that we have everything set it's time to begin the game. This is the board you will be playing on.\n\n" +
+player1_coordinate = input("Alright, that means you're " + player2.color + " " + player2.name + 
+                   ". Looks like we have everything set, it's time to begin the game! This is the board you will be playing on.\n\n" +
                    str(connect4_board) + "\nAlright " + player1.name 
-                   + ", pick where you would like place your piece with the letter first and then the number: ")
+                   + ", pick where you would like place your piece with the letter first and then the number (A1): ")
 
-#assings player1's input to a variable
-player1_coordinate = player1.add_piece(connect4_board, player1_move)
+#spacing
+print("\n")
 
-#checks if player1's input is valid
-while player1_coordinate == False:
-    new_move = input("Sorry that was an invalid input, please try again: ")
-    player1_coordinate = player1.add_piece(connect4_board, new_move)
-
-#prints the board after player1's input
-print(player1_coordinate)
+#tursn player1's input into a coordinate and returns an updated board
+print(player1.new_turn(connect4_board, player1_coordinate))
 
 #asks for player2's move
-player2_move = input("Great, now it's your turn " + player2.name + ". Pick where your would like to place your piece: ")
+player2_coordinate = input("Great, now it's your turn " + player2.name + ". Pick where your would like to place your piece: ")
 
-#assing player2's input to a variable
-player2_coordinate = player2.add_piece(connect4_board, player2_move)
+#spacing
+print("\n")
 
-#checks if player2's input is valid
-while player2_coordinate == False:
-    new_move = input("Sorry that was an invalid input, please try again: ")
-    player2_coordinate = player2.add_piece(connect4_board, new_move)
+#turns player2's input into a coordinate and returns an updated board
+print(player2.new_turn(connect4_board, player2_coordinate))
 
-#turns player1's input into a list
-print(player1_coordinate)
+#both players keep adding pieces until a player connects 4 pieces
+while (connect4_board.connect4_win(player1) == False) and (connect4_board.connect4_win(player2) == False):
+    player1_coordinate = input("Your turn " + player1.name + ": ")
+    print("\n")
+    print(player1.new_turn(connect4_board, player1_coordinate))
+    if connect4_board.connect4_win(player1) == True:
+        continue
+    player2_coordinate = input("Your turn " + player2.name + ": ")
+    print("n")
+    print(player2.new_turn(connect4_board, player2_coordinate))
 
-while player1.total_pieces(connect4_board) < 4 and player2.total_pieces(connect4_board) < 4:
-    player1_move = input("Your turn " + player1.name + ": ")
-    print(connect4_board.add_piece(player1, player1_move))
-    player2_move = input("Youe turn " + player2.name + ": ")
-    print(connect4_board.add_piece(player2, player2_move))
+#congratulates player who wins
+if connect4_board.connect4_win(player1) == True:
+    print("Congratulaions " + player1.name + ", you win!")
+elif connect4_board.connect4_win(player2) == True:
+    print("Congratulations " + player2.name + ", your win!")
