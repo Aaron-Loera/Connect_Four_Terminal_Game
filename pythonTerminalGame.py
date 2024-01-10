@@ -197,7 +197,7 @@ player1_coordinate = input("Alright, that means you're " + player2.color + " " +
 #spacing
 print("\n")
 
-#tursn player1's input into a coordinate and returns an updated board
+#turns player1's input into a coordinate and returns an updated board
 print(player1.new_turn(connect4_board, player1_coordinate))
 
 #asks for player2's move
